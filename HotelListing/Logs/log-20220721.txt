@@ -1,0 +1,14 @@
+2022-07-21 15:15:33.076 -05:00 [INF] Application is starting...
+2022-07-21 15:15:33.837 -05:00 [INF] Now listening on: https://localhost:5001
+2022-07-21 15:15:33.843 -05:00 [INF] Now listening on: http://localhost:5000
+2022-07-21 15:15:33.843 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2022-07-21 15:15:33.843 -05:00 [INF] Hosting environment: Development
+2022-07-21 15:15:33.843 -05:00 [INF] Content root path: D:\Workstation\O'Reilly\Ultimate ASP.NET 5 Web API Development Guide\HotelListing\HotelListing
+2022-07-21 15:15:35.054 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5001/swagger/index.html - -
+2022-07-21 15:15:36.036 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5001/swagger/index.html - - - 200 - text/html;charset=utf-8 990.2368ms
+2022-07-21 15:15:40.331 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5001/swagger/favicon-32x32.png - -
+2022-07-21 15:15:40.355 -05:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2022-07-21 15:15:40.355 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5001/swagger/favicon-32x32.png - - - 0 628 image/png 23.8931ms
+2022-07-21 15:15:40.504 -05:00 [INF] Request starting HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - -
+2022-07-21 15:15:40.703 -05:00 [INF] Request finished HTTP/2 GET https://localhost:5001/swagger/v1/swagger.json - - - 200 - application/json;charset=utf-8 199.1703ms
+2022-07-21 15:38:04.364 -05:00 [INF] Application is shutting down...
