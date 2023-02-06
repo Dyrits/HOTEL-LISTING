@@ -1,0 +1,20 @@
+version: '3'
+services:
+  database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=!aHr5DV##s!3u%YoPmtP%oFi6SHJi*
+      - SA_PASSWORD=!aHr5DV##s!3u%YoPmtP%oFi6SHJi*
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql-data:/var/opt/mssql
+    networks:
+      - sql-database
+networks:
+  sql-database:
+volumes:
+  sql-data:
+

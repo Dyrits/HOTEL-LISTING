@@ -4,10 +4,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using HotelListing.Data;
-using HotelListing.Repository.Interfaces;
+using HotelListing.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace HotelListing.Repository.Implementations
+namespace HotelListing.Repositories.Implementations
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
@@ -27,24 +27,26 @@ namespace HotelListing.Repository.Implementations
         )
         {
             IQueryable<T> query = _db;
+            
             if (expression != null)
             {
                 query = query.Where(expression);
             }
-            if (includeProperties != null)
-            {
-                includeProperties.ForEach(property => query = query.Include(property));
-            }
+            
+            includeProperties?.ForEach(property => query = query.Include(property));
+            
             if (orderBy != null)
             {
                 query = orderBy(query);
             }
+            
             return await query.AsNoTracking().ToListAsync();
         }
 
         public async Task<T> Get(Expression<Func<T, bool>> expression, List<string> includeProperties = null)
         {
             IQueryable<T> query = _db;
+            
             if (includeProperties != null)
             {
                 includeProperties.ForEach(property => query = query.Include(property));

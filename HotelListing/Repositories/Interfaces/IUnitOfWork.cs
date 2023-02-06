@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using HotelListing.Data;
 
-namespace HotelListing.Repository.Interfaces
+namespace HotelListing.Repositories.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
