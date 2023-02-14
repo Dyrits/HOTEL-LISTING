@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using HotelListing.Configurations;
 using HotelListing.Data;
+using HotelListing.Repositories.Implementations;
+using HotelListing.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.Patterns;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
@@ -30,15 +33,24 @@ namespace HotelListing
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DatabaseContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddControllers();
+            
+            // We add the following line to avoid the Entity to Entity reference loop problem.
+            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             });
+            
+            // We add the following line to register the AutoMapper.
             services.AddAutoMapper(typeof(MapperInitializer));
-            services.AddSwaggerGen(c =>
+            
+            // We add the following line to inject the UnitOfWork class into the controllers.
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "HotelListing", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "HotelListing", Version = "v1" });
             });
         }
 
@@ -60,7 +72,10 @@ namespace HotelListing
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
