@@ -38,7 +38,7 @@ namespace HotelListing.Controllers
 
             try
             {
-                var result = await _userManager.CreateAsync(_mapper.Map<User>(user));
+                var result = await _userManager.CreateAsync(_mapper.Map<User>(user), user.Password);
 
                 if (result.Succeeded) { return Accepted(); }
                 
