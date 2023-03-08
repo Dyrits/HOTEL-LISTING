@@ -27,9 +27,9 @@ namespace HotelListing.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] UserDTO user)
+        public async Task<IActionResult> Register([FromBody] UserDTO userDTO)
         {
-            _logger.LogInformation($"Registration attempt for {user.Email}");
+            _logger.LogInformation($"Registration attempt for {userDTO.Email}");
             
             if (!ModelState.IsValid)
             {
@@ -38,9 +38,14 @@ namespace HotelListing.Controllers
 
             try
             {
-                var result = await _userManager.CreateAsync(_mapper.Map<User>(user), user.Password);
+                var user = _mapper.Map<User>(userDTO);
+                var result = await _userManager.CreateAsync(user, userDTO.Password);
 
-                if (result.Succeeded) { return Accepted(); }
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRolesAsync(user, userDTO.Roles);
+                    return Accepted();
+                }
                 
                 result.Errors.ToList().ForEach(error => ModelState.TryAddModelError(error.Code, error.Description));
                 return BadRequest(ModelState);
@@ -55,9 +60,9 @@ namespace HotelListing.Controllers
         /*
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] UserLogin user)
+        public async Task<IActionResult> Login([FromBody] UserLogin userLogin)
         {
-            _logger.LogInformation($"Login attempt for {user.Email}");
+            _logger.LogInformation($"Login attempt for {userLogin.Email}");
             
             if (!ModelState.IsValid)
             {
@@ -66,7 +71,7 @@ namespace HotelListing.Controllers
 
             try
             {
-                var result = await _signInManager.PasswordSignInAsync(user.Email, user.Password, false, false);
+                var result = await _signInManager.PasswordSignInAsync(userLogin.Email, userLogin.Password, false, false);
                 return result.Succeeded ? Accepted() : Unauthorized();
             }
             catch (Exception exception)
